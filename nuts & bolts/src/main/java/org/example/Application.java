@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.*;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Request;
@@ -21,6 +22,14 @@ public class Application extends AbstractHandler
 {
     private static final int PAGE_SIZE = 3000;
     private static final String INDEX_HTML = loadIndex();
+
+    private static final String portDB = "1433";
+    private static final String database = "nutsandboltsdb";
+    private static final String userDB = "yellowB02";
+    private static final String passDB = "kpc7w9d2JMH5XEa";
+
+    private static final String connectionURL = "jdbc:sqlserver://" + "aa14htpmtmpc6qx.cnhuivvv6zpo.us-east-1.rds.amazonaws.com" + ":" + portDB +
+            ";databaseName=" + database + ";user=" + userDB + ";password=" + passDB + ";";
 
     private static String loadIndex() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream("/index.html")))) {
@@ -51,7 +60,35 @@ public class Application extends AbstractHandler
 
     private void handleHttpRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Handle HTTP requests here.
+        String type = request.getContentType();
+
+        if (type == "application/x-www-form-urlencoded") {
+            java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+
+            String htmlResponse = writeToDB(date);
+            PrintWriter writer = response.getWriter();
+            writer.println(htmlResponse);
+        }
         response.getWriter().println(INDEX_HTML);
+    }
+
+    private String writeToDB(java.sql.Date date)
+    {
+        String htmlResponse = "<html><p>Saved to database</p></html>";
+
+        try {
+            Connection conn = DriverManager.getConnection(connectionURL);
+            String sql = "INSERT INTO dbo.DateTime (Date) VALUES (?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, date);
+            stmt.executeUpdate();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("SQL error");
+            htmlResponse = "<html><p>Error</p></html>";
+            e.printStackTrace();
+        }
+        return htmlResponse;
     }
 
     private void handleCronTask(HttpServletRequest request, HttpServletResponse response) throws IOException {
