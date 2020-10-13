@@ -15,6 +15,6 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-http:9.2.0.RC0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-util:9.2.0.RC0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-io:9.2.0.RC0" level="project" />
-    <orderEntry type="library" name="Maven: com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre12" level="project" />
+    <orderEntry type="library" name="Maven: com.microsoft.sqlserver:mssql-jdbc:8.4.1.jre11" level="project" />
   </component>
 </module>

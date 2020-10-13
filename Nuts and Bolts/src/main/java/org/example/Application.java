@@ -1,6 +1,5 @@
 package org.example;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
@@ -24,15 +23,13 @@ public class Application extends AbstractHandler
     private static final int PAGE_SIZE = 3000;
     private static final String INDEX_HTML = loadIndex();
 
-    private static final String USER = "yellowB02";
-    private static final String PASS = "kpc7w9d2JMH5XEa";
-    private static final String PORT = "1433";
-    private static final String HOST = "aarfzcittk4zbf.cnhuivvv6zpo.us-east-1.rds.amazonaws.com";
-    private static final String DATABASE = "logs";
+    private static final String portDB = "1433";
+    private static final String database = "nutsandboltsdb";
+    private static final String userDB = "yellowB02";
+    private static final String passDB = "kpc7w9d2JMH5XEa";
 
-    private static final String connectionURL = "jdbc:sqlserver://" + HOST + ":" + PORT +
-            ";databaseName=" + DATABASE + ";user=" + USER + ";password=" + PASS + ";";
-
+    private static final String connectionURL = "jdbc:sqlserver://" + "aa14htpmtmpc6qx.cnhuivvv6zpo.us-east-1.rds.amazonaws.com" + ":" + portDB +
+            ";databaseName=" + database + ";user=" + userDB + ";password=" + passDB + ";";
 
     private static String loadIndex() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream("/index.html")))) {
@@ -65,64 +62,33 @@ public class Application extends AbstractHandler
         // Handle HTTP requests here.
         String type = request.getContentType();
 
-        try
-        {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        }
-        catch(ClassNotFoundException ex)
-        {
-            System.out.println("Error loading driver class");
-            System.exit(1);
-        }
-
-        if (type.equals("application/x-www-form-urlencoded"))
-        {
-            String lastDateTime = readFromDB();
+        if (type == "application/x-www-form-urlencoded") {
             java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-            java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-            writeToDB(date, time);
 
-            // Write date to webpage
+            String htmlResponse = writeToDB(date);
             PrintWriter writer = response.getWriter();
-            String htmlResponse = "<html>Last save was at " + lastDateTime + "</html>";
             writer.println(htmlResponse);
         }
+        response.getWriter().println(INDEX_HTML);
     }
 
-    private String readFromDB()
+    private String writeToDB(java.sql.Date date)
     {
-        String lastDateTime = "";
-        try
-        {
-            Connection conn = DriverManager.getConnection(connectionURL);
-            String sql = "SELECT TOP 1 * FROM dbo.Activities";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            lastDateTime = rs.getString(1);
-            conn.close();
-        }
-        catch (SQLException e)
-        {
-            System.out.println("SQL error");
-            System.exit(1);
-        }
+        String htmlResponse = "<html><p>Saved to database</p></html>";
 
-        return lastDateTime;
-    }
-
-    private void writeToDB(java.sql.Date date, java.sql.Time time)
-    {
         try {
             Connection conn = DriverManager.getConnection(connectionURL);
-            String sql = "INSERT INTO dbo.Activities VALUES (?)";
-            Statement stmt = conn.createStatement();
-            stmt.executeQuery(sql);
+            String sql = "INSERT INTO dbo.DateTime (Date) VALUES (?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, date);
+            stmt.executeUpdate();
             conn.close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("SQL error");
+            htmlResponse = "<html><p>Error</p></html>";
+            e.printStackTrace();
         }
+        return htmlResponse;
     }
 
     private void handleCronTask(HttpServletRequest request, HttpServletResponse response) throws IOException {

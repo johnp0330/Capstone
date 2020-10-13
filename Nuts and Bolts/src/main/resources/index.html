@@ -2,25 +2,84 @@
 <html>
   <head>
     <title>Elastic Beanstalk</title>
-    <meta charset="utf-8">
+    <style>
+      body {
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        font-size:14px;
+        -moz-transition-property: text-shadow;
+        -moz-transition-duration: 4s;
+        -webkit-transition-property: text-shadow;
+        -webkit-transition-duration: 4s;
+        text-shadow: none;
+      }
+      body.blurry {
+        -moz-transition-property: text-shadow;
+        -moz-transition-duration: 4s;
+        -webkit-transition-property: text-shadow;
+        -webkit-transition-duration: 4s;
+        text-shadow: #fff 0px 0px 25px;
+      }
+      p {
+        color: #FF9933
+      }
+      a {
+        color: #F0FFFF;
+      }
+      .textColumn, .linksColumn {
+        padding: 2em;
+      }
+      .textColumn {
+        position: absolute;
+        top: 0px;
+        right: 50%;
+        bottom: 0px;
+        left: 0px;
 
-    <title>Capstone</title>
+        text-align: right;
+        padding-top: 11em;
+        background-color: #F0FFFF;
+      }
+      .textColumn p {
+        width: 75%;
+        float:right;
+      }
+      .linksColumn {
+        position: absolute;
+        top:0px;
+        right: 0px;
+        bottom: 0px;
+        left: 50%;
 
-    <link rel="stylesheet" href="css/styles.css">
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/jQuery.js"><\/script>')</script>
-    <script src="js/scripts.js"></script>
+        background-color: #5C85D6;
+      }
 
+      h1 {
+        color: #3A599A;
+        font-size: 500%;
+        font-weight: normal;
+        margin-bottom: 0em;
+      }
+      h2 {
+        font-size: 200%;
+        font-weight: normal;
+        margin-bottom: 0em;
+      }
+      ul {
+        padding-left: 1em;
+        margin: 0px;
+      }
+      li {
+        margin: 1em 0em;
+      }
+    </style>
   </head>
   <body>
-    <p>Hello World</p>
-    <form action="Application.java" method="post">
-        <input type="submit" name="getBtn" value="Get data" />
-    </form>
-    
-    <p id="date"></p>
-      
+      <h1>Hello World</h1>
+        <form action="Application.java" method="post">
+            <input type="submit" value="Click me">
+        </form>
+
   </body>
 </html>
 
