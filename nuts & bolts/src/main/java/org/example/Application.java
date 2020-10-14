@@ -63,32 +63,65 @@ public class Application extends AbstractHandler
         String type = request.getContentType();
 
         if (type == "application/x-www-form-urlencoded") {
-            java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+            java.sql.Timestamp date = new java.sql.Timestamp(System.currentTimeMillis());
 
-            String htmlResponse = writeToDB(date);
+            String htmlResponse = readFromDB();
+            writeToDB(date);
             PrintWriter writer = response.getWriter();
-            writer.println(htmlResponse);
+            writer.println("<html><p>" + htmlResponse + "</p></html>");
         }
         response.getWriter().println(INDEX_HTML);
     }
 
-    private String writeToDB(java.sql.Date date)
+    /**
+     * Reads latest record in the database
+     * @return String with the response to be displayed
+     */
+    private String readFromDB()
     {
-        String htmlResponse = "<html><p>Saved to database</p></html>";
+        String htmlResponse;
 
         try {
             Connection conn = DriverManager.getConnection(connectionURL);
-            String sql = "INSERT INTO dbo.DateTime (Date) VALUES (?)";
+            String sql = "SELECT TOP 1 Date " +
+                         "FROM dbo.DateTime " +
+                         "ORDER BY id DESC";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, date);
+
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            java.sql.Timestamp date = rs.getTimestamp("Date");
+
+            htmlResponse = "The last click was at " + date.toString() + " UTC";
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("SQL error");
+            htmlResponse = "Error retrieving last record";
+            e.printStackTrace();
+        }
+
+        return htmlResponse;
+    }
+
+    /**
+     * Writes the date timestamp to the database
+     * @param date - Timestamp object
+     */
+    private void writeToDB(java.sql.Timestamp date)
+    {
+        try {
+            Connection conn = DriverManager.getConnection(connectionURL);
+            String sql = "INSERT INTO dbo.DateTime (Date) " +
+                         "VALUES (?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setTimestamp(1, date);
+
             stmt.executeUpdate();
             conn.close();
         } catch (SQLException e) {
             System.out.println("SQL error");
-            htmlResponse = "<html><p>Error</p></html>";
             e.printStackTrace();
         }
-        return htmlResponse;
     }
 
     private void handleCronTask(HttpServletRequest request, HttpServletResponse response) throws IOException {
