@@ -1,84 +1,96 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Elastic Beanstalk</title>
-    <style>
-      body {
-        color: #ffffff;
-        font-family: Arial, sans-serif;
-        font-size:14px;
-        -moz-transition-property: text-shadow;
-        -moz-transition-duration: 4s;
-        -webkit-transition-property: text-shadow;
-        -webkit-transition-duration: 4s;
-        text-shadow: none;
-      }
-      body.blurry {
-        -moz-transition-property: text-shadow;
-        -moz-transition-duration: 4s;
-        -webkit-transition-property: text-shadow;
-        -webkit-transition-duration: 4s;
-        text-shadow: #fff 0px 0px 25px;
-      }
-      p {
-        color: #FF9933
-      }
-      a {
-        color: #F0FFFF;
-      }
-      .textColumn, .linksColumn {
-        padding: 2em;
-      }
-      .textColumn {
-        position: absolute;
-        top: 0px;
-        right: 50%;
-        bottom: 0px;
-        left: 0px;
-
-        text-align: right;
-        padding-top: 11em;
-        background-color: #F0FFFF;
-      }
-      .textColumn p {
-        width: 75%;
-        float:right;
-      }
-      .linksColumn {
-        position: absolute;
-        top:0px;
-        right: 0px;
-        bottom: 0px;
-        left: 50%;
-
-        background-color: #5C85D6;
-      }
-
-      h1 {
-        color: #3A599A;
-        font-size: 500%;
-        font-weight: normal;
-        margin-bottom: 0em;
-      }
-      h2 {
-        font-size: 200%;
-        font-weight: normal;
-        margin-bottom: 0em;
-      }
-      ul {
-        padding-left: 1em;
-        margin: 0px;
-      }
-      li {
-        margin: 1em 0em;
-      }
-    </style>
-  </head>
+<html lang="en">
+<head>
+		<meta charset="utf-8">
+		
+		<title>Home Page</title>
+		
+		<h1>Home Page</h1>
+  
+		<link rel="stylesheet" href="style.css">
+		
+	</head>
   <body>
+  	
+		<div class="tablecontent">
+		
+			<form action="Application" method="get">
+				<input type="submit" name="homepage" value="Home Page">
+				<input type="submit" name="contactUsBtn" value="Contact Us"/>
+				<input type="submit" name="faq" value="FAQ"/>
+			</form>
+			
+		</div>		
+			
       <h1>Hello World</h1>
-        <form action="Application.java" method="post">
-            <input type="submit" value="Click me">
+        <form action="Application" method="post">
+            <input type="submit" name="date" value="Click me">
         </form>
+		
+	
+
+		<div class="content">
+		
+		<h1> Contact US </h1>
+			
+			<p>Hello! Below are the different ways you can get in touch with us</p>
+	​
+			<h2>Contact Information</h2>
+			<p> Address: 550 E Spring St, Columbus, OH 43215 <br>
+			Phone: (614) 287-5353 <br>
+			Email: ColumbusState@cscc.edu</p>
+		
+			<fieldset id="fieldset">
+				<label for="fname">First name:</label>
+				<input type="text" id="fname" name="fname" value=""><br>
+	  
+				<br> <label for="lname">Last name:</label>
+				<input type="text" id="lname" name="lname" value=""><br><br>
+	 
+	​
+				<textarea id="questionBox" name="questionBox" rows="35" cols="100"> </textarea>
+				<br><br>
+	 
+				<input type="submit" value="Submit">
+			</fieldset>
+
+		</div>
+		
+		
+				<div class="content">
+				
+				<h1> FAQ </h1>
+	
+			<h4>Some questions answered regarding Knots and Bolts online shopping</h4>
+			<div class="content">Question: How do I contact the support? <br>
+				<br>
+				Answer: We have provided the contact number, Fax, Email and physical address. If in case you want to contact "Knots and Bolts" use any of the provided method
+			</div>
+				
+			<div class="content">Question: How can I return the items that I purchased? <br>
+				<br>
+					Answer: To return the purchases items, follow the instructions below: <br>
+					1, Go to your Order <br>
+					2.Click the item you want to return <br>
+					3.When you get redirected to the next page,click view order details <br>
+					4. Click return the item <br>
+				</div>
+			
+			<div class="content">Question: How do I edit the cart? <br>
+				<br>
+				Answer: Editing the cart is simple, just click the cart on right hand site,that will redirect to a page with active shopping card,click "delete" to remove items, click "+" or "-" for quantities you wish to purchase
+			</div>
+
+		</div>
+​
+	</body>
+​
+	<div class="footer">
+		<h2> Test Phase </h2>
+	</div>
+​
+	</body>
+		
 
   </body>
 </html>

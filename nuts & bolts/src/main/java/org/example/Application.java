@@ -21,7 +21,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 public class Application extends AbstractHandler
 {
     private static final int PAGE_SIZE = 3000;
-    private static final String INDEX_HTML = loadIndex();
+    private static final String INDEX_HTML = loadPage("/index.html");
 
     private static final String portDB = "1433";
     private static final String database = "nutsandboltsdb";
@@ -31,8 +31,34 @@ public class Application extends AbstractHandler
     private static final String connectionURL = "jdbc:sqlserver://" + "aa14htpmtmpc6qx.cnhuivvv6zpo.us-east-1.rds.amazonaws.com" + ":" + portDB +
             ";databaseName=" + database + ";user=" + userDB + ";password=" + passDB + ";";
 
-    private static String loadIndex() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream("/index.html")))) {
+    private static String loadPage(String name)
+    {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(name)))) {
+            final StringBuilder page = new StringBuilder(PAGE_SIZE);
+            String line = null;
+            // Reading page until we find the <head> tag
+            while ((line = reader.readLine()) != null && !line.contains("<head>"))
+            {
+                page.append(line);
+            }
+            // Adding the css to the page
+            page.append("<head> " +
+                        "<style>");
+            page.append(loadResource("/style.css"));
+            page.append("</style>");
+            // Continuing to read the rest of the page
+            while ((line = reader.readLine()) != null) {
+                page.append(line);
+            }
+
+            return page.toString();
+        } catch (final Exception exception) {
+            return getStackTrace(exception);
+        }
+    }
+
+    private static String loadResource(String name) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(name)))) {
             final StringBuilder page = new StringBuilder(PAGE_SIZE);
             String line = null;
 
@@ -61,15 +87,34 @@ public class Application extends AbstractHandler
     private void handleHttpRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Handle HTTP requests here.
         String type = request.getContentType();
+        String page = INDEX_HTML;
 
         if (type == "application/x-www-form-urlencoded") {
-            java.sql.Timestamp date = new java.sql.Timestamp(System.currentTimeMillis());
 
-            String htmlResponse = readWriteDB(date);
-            PrintWriter writer = response.getWriter();
-            writer.println("<html><p>" + htmlResponse + "</p></html>");
+            if (request.getParameter("date") != null) {
+                java.sql.Timestamp date = new java.sql.Timestamp(System.currentTimeMillis());
+
+                String htmlResponse = readWriteDB(date);
+                PrintWriter writer = response.getWriter();
+                writer.println("<html><p>" + htmlResponse + "</p></html>");
+                response.getWriter().println(INDEX_HTML);
+            }
         }
-        response.getWriter().println(INDEX_HTML);
+
+        if (request.getParameter("contactUsBtn") != null)
+        {
+            page = loadPage("/contact_us.html");
+        }
+        else if (request.getParameter("faq") != null)
+        {
+            page = loadPage("/faq.html");
+        }
+        else if (request.getParameter("homepage") != null)
+        {
+            page = loadPage("/index.html");
+        }
+
+        response.getWriter().println(page);
     }
     /**
      * Reads and returns the last record from the database and writes the current date to the database
