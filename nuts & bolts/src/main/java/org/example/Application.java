@@ -87,6 +87,7 @@ public class Application extends AbstractHandler
     private void handleHttpRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Handle HTTP requests here.
         String type = request.getContentType();
+        String uri = request.getRequestURI();
         String page = INDEX_HTML;
 
         if (type == "application/x-www-form-urlencoded") {
@@ -97,21 +98,11 @@ public class Application extends AbstractHandler
                 String htmlResponse = readWriteDB(date);
                 PrintWriter writer = response.getWriter();
                 writer.println("<html><p>" + htmlResponse + "</p></html>");
-                response.getWriter().println(INDEX_HTML);
             }
         }
-
-        if (request.getParameter("contactUsBtn") != null)
+        else if (uri.contains(".html"))
         {
-            page = loadPage("/contact_us.html");
-        }
-        else if (request.getParameter("faq") != null)
-        {
-            page = loadPage("/faq.html");
-        }
-        else if (request.getParameter("homepage") != null)
-        {
-            page = loadPage("/index.html");
+            page = loadPage(uri);
         }
 
         response.getWriter().println(page);
