@@ -15,8 +15,8 @@ public class Database {
 
     /**
      * Establishes a connection to the database.
-     * @return Connection - A SQL connection object
-     * @throws SQLException - Database connection exception
+     * @return SQL connection object
+     * @throws SQLException Database connection exception
      */
     public static Connection connect() throws SQLException
     {
@@ -25,7 +25,7 @@ public class Database {
 
     /**
      * Reads all data from Inventory and formats it into a JSON object.
-     * @return jsonObject - All inventory data in JSON object format
+     * @return All inventory data in a JSON object
      */
     public static JSONObject readInventory()
     {
@@ -45,6 +45,7 @@ public class Database {
                 //Inserting key-value pairs into the json object
                 record.put("SKU", rs.getString("SKU"));
                 record.put("ItemName", rs.getString("ItemName"));
+                record.put("Quantity", rs.getInt("Quantity"));
                 record.put("Price", rs.getDouble("Price"));
                 record.put("Description", rs.getString("Description"));
                 array.add(record);
@@ -61,25 +62,26 @@ public class Database {
 
     /**
      * Takes in details of an item and adds it to the inventory table in the database.
-     * @param sku - SKU code for the item
-     * @param itemName - Name of the item
-     * @param price - Price of the item
-     * @param description - Description of the item
-     * @return rows - Number of rows updated (It should be exactly one)
+     * @param sku SKU code for the item
+     * @param itemName Name of the item
+     * @param price Price of the item
+     * @param description Description of the item
+     * @return Number of rows updated (It should be exactly one)
      */
-    public static int addInventory(String sku, String itemName, double price, String description)
+    public static int addInventory(String sku, String itemName, int quantity, double price, String description)
     {
         int rows = 0;
 
-        String sql = "INSERT INTO dbo.Inventory(SKU, ItemName, Price, Description) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO dbo.Inventory(SKU, ItemName, Quantity, Price, Description) VALUES(?,?,?,?,?)";
 
         try (Connection con = connect();
              PreparedStatement stmt = con.prepareStatement(sql))
         {
             stmt.setString(1, sku);
             stmt.setString(2, itemName);
-            stmt.setDouble(3, price);
-            stmt.setString(4, description);
+            stmt.setInt(3, quantity);
+            stmt.setDouble(4, price);
+            stmt.setString(5, description);
 
             rows = stmt.executeUpdate();
         }
@@ -94,7 +96,7 @@ public class Database {
 
     /**
      * Reads and returns the last record from the database and writes the current date to the database.
-     * @param date - Date at which the button was pressed
+     * @param date Date at which the button was pressed
      * @return String containing the previous date at which the button was pressed
      */
     public static String readWriteDB(java.sql.Timestamp date)
