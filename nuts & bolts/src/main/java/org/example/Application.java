@@ -1,48 +1,33 @@
 package org.example;
 
-import javax.servlet.ServletContext;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpSession;
-
 import java.io.*;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.*;
-
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class Application extends AbstractHandler
 {
     private static final int PAGE_SIZE = 3000;
     private static final String INDEX_HTML = loadPage("/index.html");
 
-    private static final String portDB = "1433";
-    private static final String database = "nutsandboltsdb";
-    private static final String userDB = "yellowB02";
-    private static final String passDB = "kpc7w9d2JMH5XEa";
-
-    private static final String connectionURL = "jdbc:sqlserver://" + "aa14htpmtmpc6qx.cnhuivvv6zpo.us-east-1.rds.amazonaws.com" + ":" + portDB +
-            ";databaseName=" + database + ";user=" + userDB + ";password=" + passDB + ";";
-
     private static String loadPage(String name)
     {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(name)))) {
             final StringBuilder page = new StringBuilder(PAGE_SIZE);
-            String line = null;
-            // Reading page until we find the <head> tag
-            while ((line = reader.readLine()) != null && !line.contains("<head>"))
+            String line;
+
+            while ((line = reader.readLine()) != null && !line.contains("<head>")) // Reading page until we find the <head> tag
             {
                 page.append(line);
             }
 
             // Adding the css and js to the page
-            page.append("<head> " +
-                        "<style>");
+            page.append("<head> ");
+            page.append("<style>");
             page.append(loadResource("/style.css"));
             page.append("</style>");
             page.append("<script>");
@@ -63,7 +48,7 @@ public class Application extends AbstractHandler
     private static String loadResource(String name) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(name)))) {
             final StringBuilder page = new StringBuilder(PAGE_SIZE);
-            String line = null;
+            String line;
 
             while ((line = reader.readLine()) != null) {
                 page.append(line);
@@ -88,29 +73,29 @@ public class Application extends AbstractHandler
     }
 
     private void handleHttpRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Handle HTTP requests here.
         String type = request.getContentType();
         String uri = request.getRequestURI();
         String page = INDEX_HTML;
 
-        if (type == "application/x-www-form-urlencoded") {
-
+        if (type == "application/x-www-form-urlencoded") // POST request
+        {
             if (request.getParameter("date") != null) {
                 java.sql.Timestamp date = new java.sql.Timestamp(System.currentTimeMillis());
 
-                String htmlResponse = readWriteDB(date);
+                String htmlResponse = Database.readWriteDB(date);
+
                 PrintWriter writer = response.getWriter();
+
                 writer.println("<html><p>" + htmlResponse + "</p></html>");
             }
         }
-        else if (uri.contains(".html"))
+        else if (uri.contains(".html")) // Requesting web page
         {
             page = loadPage(uri);
         }
-        else if (uri.contains(".png") || uri.contains(".jpg"))
+        else if (uri.contains(".png") || uri.contains(".jpg")) // Requesting image
         {
             String baseUrl = "src/main/resources";
-
             String mime = uri.contains(".png") ? "image/png" : "image/jpeg";
 
             response.setContentType(mime);
@@ -130,42 +115,6 @@ public class Application extends AbstractHandler
         }
 
         response.getWriter().println(page);
-    }
-    /**
-     * Reads and returns the last record from the database and writes the current date to the database
-     * @param date - Date at which the button was pressed
-     * @return String containing the previous date at which the button was pressed
-     */
-    private static String readWriteDB(java.sql.Timestamp date)
-    {
-        String htmlResponse;
-
-        try (Connection conn = DriverManager.getConnection(connectionURL);)
-        {
-            // Reading from DB
-            String sql = "SELECT TOP 1 Date " +
-                    "FROM dbo.DateTime " +
-                    "ORDER BY id DESC";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            java.sql.Timestamp lastDate = rs.getTimestamp("Date");
-
-            // Writing to DB
-            sql = "INSERT INTO dbo.DateTime (Date) " +
-                    "VALUES (?)";
-            stmt = conn.prepareStatement(sql);
-            stmt.setTimestamp(1, date);
-            stmt.executeUpdate();
-
-            htmlResponse = "The last click was at " + lastDate.toString() + " UTC";
-        } catch (SQLException e) {
-            System.out.println("SQL error");
-            htmlResponse = "Error sending or retrieving data";
-            e.printStackTrace();
-        }
-
-        return htmlResponse;
     }
 
     private void handleCronTask(HttpServletRequest request, HttpServletResponse response) throws IOException {
