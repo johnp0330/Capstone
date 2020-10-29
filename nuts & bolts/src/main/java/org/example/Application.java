@@ -9,14 +9,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
+
 public class Application extends AbstractHandler
 {
     private static final int PAGE_SIZE = 3000;
     private static final String INDEX_HTML = loadPage("/index.html");
+    private static final String css = "/style.css";
+    private static final String js = "/js/script.js";
 
-    private static String loadPage(String name)
+    /**
+     * Reads and returns every line of a html file, inserting JS and CSS in the head tag (Used for full web pages).
+     * @param uri String of the file URI
+     * @return String of Every line of the full web page
+     */
+    private static String loadPage(String uri)
     {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(name)))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(uri)))) {
             final StringBuilder page = new StringBuilder(PAGE_SIZE);
             String line;
 
@@ -28,10 +36,10 @@ public class Application extends AbstractHandler
             // Adding the css and js to the page
             page.append("<head> ");
             page.append("<style>");
-            page.append(loadResource("/style.css"));
+            page.append(loadResource(css));
             page.append("</style>");
             page.append("<script>");
-            page.append(loadResource("/script.js"));
+            page.append(loadResource(js));
             page.append("</script>");
 
             // Continuing to read the rest of the page
@@ -45,8 +53,13 @@ public class Application extends AbstractHandler
         }
     }
 
-    private static String loadResource(String name) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(name)))) {
+    /**
+     * Reads and returns every line of a file (Used for JS and CSS files).
+     * @param uri String of the file URI
+     * @return String of all lines of file
+     */
+    private static String loadResource(String uri) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(uri)))) {
             final StringBuilder page = new StringBuilder(PAGE_SIZE);
             String line;
 
@@ -77,21 +90,25 @@ public class Application extends AbstractHandler
         String uri = request.getRequestURI();
         String page = INDEX_HTML;
 
-        if (type == "application/x-www-form-urlencoded") // POST request
+        if ("application/x-www-form-urlencoded".equals(type)) // Requesting an item be added to inventory
         {
-            if (request.getParameter("date") != null) {
-                java.sql.Timestamp date = new java.sql.Timestamp(System.currentTimeMillis());
+            String sku = request.getParameter("sku");
+            String itemName = request.getParameter("itemname");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            double price = Double.parseDouble(request.getParameter("price"));
+            String description = request.getParameter("description");
 
-                String htmlResponse = Database.readWriteDB(date);
+            int rows = Database.addInventory(sku, itemName, quantity, price, description);
 
-                PrintWriter writer = response.getWriter();
+            String htmlResponse = (rows == 1 ? "Item successfully added to inventory." : "Unsuccessful.");
+            PrintWriter writer = response.getWriter();
 
-                writer.println("<html><p>" + htmlResponse + "</p></html>");
-            }
+            writer.println(reloadInventory(htmlResponse));
         }
         else if (uri.contains(".html")) // Requesting web page
         {
             page = loadPage(uri);
+            response.getWriter().println(page);
         }
         else if (uri.contains(".png") || uri.contains(".jpg")) // Requesting image
         {
@@ -113,8 +130,10 @@ public class Application extends AbstractHandler
             in.close();
             out.close();
         }
-
-        response.getWriter().println(page);
+        else
+        {
+            response.getWriter().println(page);
+        }
     }
 
     private void handleCronTask(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -142,5 +161,52 @@ public class Application extends AbstractHandler
         server.setHandler(new Application());
         server.start();
         server.join();
+    }
+
+   /*
+    * The entire purpose of this method is to add a response above the
+    * inventory form telling the user whether the form was successful or not.
+    * It feels super redundant, but it works.
+    */
+    public static String reloadInventory(String htmlResponse)
+    {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream("/inventory.html")))) {
+            final StringBuilder page = new StringBuilder(PAGE_SIZE);
+            String line;
+
+            while ((line = reader.readLine()) != null && !line.contains("<head>")) // Reading page until we find the <head> tag
+            {
+                page.append(line);
+            }
+
+            // Adding the css and js to the page
+            page.append("<head> ");
+            page.append("<style>");
+            page.append(loadResource(css));
+            page.append("</style>");
+            page.append("<script>");
+            page.append(loadResource(js));
+            page.append("</script>");
+
+            // Continuing to read until we find the 'addInventory' form
+            while ((line = reader.readLine()) != null && !line.contains("addInventory")) {
+                page.append(line);
+            }
+
+            // Adding response
+            page.append("<p>");
+            page.append(htmlResponse);
+            page.append("</p>");
+
+            // Continuing to read the rest of the page
+            while ((line = reader.readLine()) != null) {
+                page.append(line);
+            }
+
+            return page.toString();
+        } catch (final Exception exception) {
+            System.out.println("Unable to load inventory");
+            return getStackTrace(exception);
+        }
     }
 }

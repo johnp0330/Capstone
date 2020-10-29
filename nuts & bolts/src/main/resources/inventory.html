@@ -1,0 +1,214 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Nuts and bolts - HomePage</title>
+  
+  <link rel="stylesheet" href="style.css">
+  
+ 
+</head>
+
+<body>
+  
+	<div class="row">
+		<div class="column">
+			
+			<img src="images/k_b.png" alt="logo" id="banner">
+			
+		</div>
+		
+		<div class="column">
+			
+			<p></p>
+			
+			
+		</div>
+		
+		<div class="column">
+		
+		 <p></p>
+		
+		</div>
+		
+		<div class="column">
+		
+		<img src="images/account.jpg" alt="account" id="account"> <img src="images/cart.jpg" alt="cart" id="cart">
+		
+		</div>
+  </div>
+
+	<div id="id=1"></div>
+	<script>
+	const url='aa14htpmtmpc6qx.cnhuivvv6zpo.us-east-1.rds.amazonaws.com';
+	Http.open("GET", url);
+	Http.send();
+
+	Http.onreadystatechange = (e) => {
+	console.log(Http.responseText)
+	}
+	</script>
+  
+  <div class="tablecontent">
+				
+			<a href="index.html">Home Page</a>
+			<a href="inventory.html">Inventory</a>
+			<a href="forsale.html">On Sale</a>
+			<a href="contact_us.html">Contact Us</a>
+			<a href="faq.html">FAQ</a>
+			
+	</div>
+	
+	
+	<div class="content">
+	
+	
+	<div class="faqcontent"> <h2 style="text-align:center;">Inventory</h2> </div>
+		
+	<div class="row">
+		<div class="column1">
+		
+				<img src="images/hammer.jpg" alt="hammer" id="featured"><br>
+				<h3 style="text-align:center;">Hammer</h3>
+				<p>Heavy duty tools to get the job done. Designed to used for nails and ripping nails out.</p>
+		</div>
+		
+		
+		<div class="column1">
+			
+			<img src="images/powerdrill.jpg" alt="powerdrill" id="featured"><br>
+			<h3 style="text-align:center;">Powerdrill</h3>
+			<p>Powered with lithium-ion battery that holds a charge 4 times longer and lightweight. Powerful with up to 200 lbs of torque.</p>
+		
+		</div>
+		
+		<div class="column1">
+		
+			<img src="images/screws.jpg" alt="screws" id="featured"><br>
+			<h3 style="text-align:center;">Screws</h3>
+			<p>Used to secure and hold objects together.</p>
+			
+		</div>
+		
+		<div class="column1">
+		
+			<img src="images/washers.jpg" alt="washers" id="featured"><br>
+			<h3 style="text-align:center;">Washers</h3>
+			<p>Used to protect surface from damage during installations. Evenly spread the load over a wider area.</p>
+			
+		</div>
+		<div class="gap"></div> 
+		<div class="column2">
+			
+			<img src="images/drillbit.jpg" alt="bolts" id="featured"><br>
+			<h3 style="text-align:center;">Drill Bits</h3>
+			<p>Enhanced hole-drilling performance. Used in wood, metal, plastics and fiberglass.</p>
+		
+		</div>
+		
+		
+		<div class="column2">
+			
+			<img src="images/fireext.jpg" alt="fireext" id="featured"><br>
+			<h3 style="text-align:center;">Fire Extinguisher </h3>
+			<p>Ideal for use on most common fires. With easy to read Pressure Guage. </p>
+		
+		</div>
+		
+		<div class="column2">
+			
+			<img src="images/dooropener.jpg" alt="dooropener" id="featured"><br>
+			<h3 style="text-align:center;">Garage Door Opener</h3>
+			<p>Smart garage door opener. Open and close with smartphone with status of garage door.</p>
+		
+		</div>
+		
+		<div class="column2">
+			
+			<img src="images/chain.jpg" alt="chain" id="featured"><br>
+			<h3 style="text-align:center;">Chain</h3>
+			<p>Weather resistance, flexible and 500lbs work load limit.</p>
+		
+		</div>
+		<div class="gap"></div> 
+		<div class="column2">
+			
+			<img src="images/deadbolt.jpg" alt="deadbolt" id="featured"><br>
+			<h3 style="text-align:center;">Deadbolt Door Locks</h3>
+			<p>Protects from drilling and prying. Design for easy installation.</p>
+		
+		</div>
+		
+		<div class="column1">
+			
+			<img src="images/smokealarm.jpg" alt="smokealarm" id="featured"><br>
+			<h3 style="text-align:center;">Smoke Alarm</h3>
+			<p>Alerts when fire or smoke is detected in your home. </p>
+		
+		</div>
+		
+		<form name="addInventory" action="Application.java" method="post">
+		   <label for="sku">SKU:</label>
+		   <input type="text" id="sku" name="sku"><br><br>
+		   <label for="itemname">Item Name:</label>
+		   <input type="text" id="itemname" name="itemname"><br><br>
+		   <label for="quantity">Quantity:</label>
+		   <input type="text" id="quantity" name="quantity"><br><br>
+		   <label for="price">Price:</label>
+		   <input type="text" id="price" name="price"><br><br>
+		   <label for="description">Description:</label>
+		   <input type="text" id="description" name="description"><br><br>
+		   <input type="submit" value="Submit">
+		</form>
+  </div>
+  
+  
+  
+  
+  
+		
+	
+			
+			<img src="images/instock.png" alt="instock" id="instock1">
+			
+		
+	
+			
+	</div>
+	
+	<div class="footer">
+		<a href="#banner">Back to the top</a> 
+	</div>
+	
+	<div class="footer2">
+		<div class="row">
+		<div class="column">
+			<div class="topcontent">
+				<img src="images/k_b.png" alt="logo" id="banner">
+			
+			</div>
+  
+		</div>
+		
+		<div class="column">
+			
+			<a href="index.html">Home Page</a><br>
+			<a href="inventory.html">Inventory</a><br>
+			<a href="contact_us.html">Contact Us</a><br>
+			<a href="faq.html">FAQ</a><br>
+			
+			
+			
+		
+		</div>
+	</div>
+  
+	<div class="footer">
+		<p>2020 © All rights reserved.</p>
+	</div>
+  
+  
+</body>
+</html>
