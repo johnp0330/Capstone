@@ -4,211 +4,309 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Nuts and bolts - HomePage</title>
+  <title>Nuts and Bolts - Inventory</title>
   
   <link rel="stylesheet" href="style.css">
-  
- 
 </head>
-
 <body>
-  
 	<div class="row">
-		<div class="column">
-			
-			<img src="images/k_b.png" alt="logo" id="banner">
-			
+		<div class="column">	
+			<img src="images/k_b-header.png" alt="logo" id="banner">
 		</div>
-		
-		<div class="column">
-			
-			<p></p>
-			
-			
+		<div class="column">	
+			<p></p>		
 		</div>
-		
-		<div class="column">
-		
-		 <p></p>
-		
-		</div>
-		
-		<div class="column">
-		
-		<img src="images/account.jpg" alt="account" id="account"> <img src="images/cart.jpg" alt="cart" id="cart">
-		
+		<div class="column">		
+		 <p></p>		
+		</div>		
+		<div class="column">		
+		<img src="images/account.jpg" alt="account" id="account"> <img src="images/cart.jpg" alt="cart" id="cart">		
 		</div>
   </div>
-
-	<div id="id=1"></div>
-	<script>
-	const url='aa14htpmtmpc6qx.cnhuivvv6zpo.us-east-1.rds.amazonaws.com';
-	Http.open("GET", url);
-	Http.send();
-
-	Http.onreadystatechange = (e) => {
-	console.log(Http.responseText)
-	}
-	</script>
-  
   <div class="tablecontent">
 				
 			<a href="index.html">Home Page</a>
 			<a href="inventory.html">Inventory</a>
 			<a href="forsale.html">On Sale</a>
 			<a href="contact_us.html">Contact Us</a>
-			<a href="faq.html">FAQ</a>
-			
+			<a href="faq.html">FAQ</a>		
 	</div>
 	
 	
+	
+	
+
+
 	<div class="content">
 	
-	
-	<div class="faqcontent"> <h2 style="text-align:center;">Inventory</h2> </div>
-		
-	<div class="row">
-		<div class="column1">
-		
-				<img src="images/hammer.jpg" alt="hammer" id="featured"><br>
-				<h3 style="text-align:center;">Hammer</h3>
-				<p>Heavy duty tools to get the job done. Designed to used for nails and ripping nails out.</p>
+	<div class="faqcontent">
+			<h1 style="text-align:center;">Full Inventory</h1>
 		</div>
-		
-		
-		<div class="column1">
+        
+        <div class="container">
+            <div class="tab tab-1">
+                <table id="table">
+                    <tr>
+					
+                        <th>Item Name</th>
+                        <th>SKU</th>
+                        <th>Price</th>
+						<th>Quantity</th>
+						<th>Description</th>
+						
+                    </tr>
+					
+					<tr>
+					
+					<th>Hammer</th>
+					<th>NA</th>
+					<th><p style="text-decoration: line-through; color: red"> $12.99 </p> $10.99 </th>
+					<th>5</th>
+					<th>Heavy duty tools to get the job done. Designed to used for nails and ripping nails out.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>Power Drill</th>
+					<th>NA</th>
+					<th>$49.99</th>
+					<th>5</th>
+					<th>Powered with lithium-ion battery that holds a charge 4 times longer and lightweight. Powerful with up to 200 lbs of torque.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>100 pack Metal Screws</th>
+					<th>NA</th>
+					<th><p style="text-decoration: line-through; color: red"> $13.99 </p> $10.99</th>
+					<th>5</th>
+					<th>Used to secure and hold objects together.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>100 pack Flat Washers</th>
+					<th>NA</th>
+					<th>$8.79</th>
+					<th>5</th>
+					<th>Used to protect surface from damage during installations. Evenly spread the load over a wider area.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>Drill Bits</th>
+					<th>NA</th>
+					<th><p style="text-decoration: line-through; color: red"> $20.99 </p> $18.99</th>
+					<th>5</th>
+					<th>Enhanced hole-drilling performance. Used in wood, metal, plastics and fiberglass.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>Fire Extinguisher</th>
+					<th>NA</th>
+					<th>$22.99</th>
+					<th>5</th>
+					<th>Ideal for use on most common fires. With easy to read Pressure Guage.</th>
+					
+					</tr>
+					
+					<tr>
+				
+					<th>Garage Door Opener</th>
+					<th>NA</th>
+					<th>$189.99</th>
+					<th>5</th>
+					<th>Smart garage door opener. Open and close with smartphone with status of garage door.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>Steel Chains</th>
+					<th>NA</th>
+					<th><p style="text-decoration: line-through; color: red"> $59.99 </p>  $49.99</th>
+					<th>5</th>
+					<th>Weather resistance, flexible and 500lbs work load limit.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>Deadbolt Door Locks</th>
+					<th>NA</th>
+					<th><p style="text-decoration: line-through; color: red"> $23.99 </p> $19.99</th>
+					<th>5</th>
+					<th>Protects from drilling and prying. Design for easy installation.</th>
+					
+					</tr>
+					
+					<tr>
+					
+					<th>Smoke Alarm</th>
+					<th>NA</th>
+					<th>$29.99</th>
+					<th>5</th>
+					<th>Alerts when fire or smoke is detected in your home.</th>
+					
+					</tr>
+ 
+                </table>
+            </div>
+            <div class="tab tab-2">
 			
-			<img src="images/powerdrill.jpg" alt="powerdrill" id="featured"><br>
-			<h3 style="text-align:center;">Powerdrill</h3>
-			<p>Powered with lithium-ion battery that holds a charge 4 times longer and lightweight. Powerful with up to 200 lbs of torque.</p>
-		
-		</div>
-		
-		<div class="column1">
-		
-			<img src="images/screws.jpg" alt="screws" id="featured"><br>
-			<h3 style="text-align:center;">Screws</h3>
-			<p>Used to secure and hold objects together.</p>
-			
-		</div>
-		
-		<div class="column1">
-		
-			<img src="images/washers.jpg" alt="washers" id="featured"><br>
-			<h3 style="text-align:center;">Washers</h3>
-			<p>Used to protect surface from damage during installations. Evenly spread the load over a wider area.</p>
-			
-		</div>
-		<div class="gap"></div> 
-		<div class="column2">
-			
-			<img src="images/drillbit.jpg" alt="bolts" id="featured"><br>
-			<h3 style="text-align:center;">Drill Bits</h3>
-			<p>Enhanced hole-drilling performance. Used in wood, metal, plastics and fiberglass.</p>
-		
-		</div>
-		
-		
-		<div class="column2">
-			
-			<img src="images/fireext.jpg" alt="fireext" id="featured"><br>
-			<h3 style="text-align:center;">Fire Extinguisher </h3>
-			<p>Ideal for use on most common fires. With easy to read Pressure Guage. </p>
-		
-		</div>
-		
-		<div class="column2">
-			
-			<img src="images/dooropener.jpg" alt="dooropener" id="featured"><br>
-			<h3 style="text-align:center;">Garage Door Opener</h3>
-			<p>Smart garage door opener. Open and close with smartphone with status of garage door.</p>
-		
-		</div>
-		
-		<div class="column2">
-			
-			<img src="images/chain.jpg" alt="chain" id="featured"><br>
-			<h3 style="text-align:center;">Chain</h3>
-			<p>Weather resistance, flexible and 500lbs work load limit.</p>
-		
-		</div>
-		<div class="gap"></div> 
-		<div class="column2">
-			
-			<img src="images/deadbolt.jpg" alt="deadbolt" id="featured"><br>
-			<h3 style="text-align:center;">Deadbolt Door Locks</h3>
-			<p>Protects from drilling and prying. Design for easy installation.</p>
-		
-		</div>
-		
-		<div class="column1">
-			
-			<img src="images/smokealarm.jpg" alt="smokealarm" id="featured"><br>
-			<h3 style="text-align:center;">Smoke Alarm</h3>
-			<p>Alerts when fire or smoke is detected in your home. </p>
-		
-		</div>
-		
-		<form name="addInventory" action="Application.java" method="post">
-		   <label for="sku">SKU:</label>
-		   <input type="text" id="sku" name="sku"><br><br>
-		   <label for="itemname">Item Name:</label>
-		   <input type="text" id="itemname" name="itemname"><br><br>
-		   <label for="quantity">Quantity:</label>
-		   <input type="text" id="quantity" name="quantity"><br><br>
-		   <label for="price">Price:</label>
-		   <input type="text" id="price" name="price"><br><br>
-		   <label for="description">Description:</label>
-		   <input type="text" id="description" name="description"><br><br>
-		   <input type="submit" value="Submit">
-		</form>
-  </div>
-  
-  
-  
-  
-  
-		
-	
-			
-			<img src="images/instock.png" alt="instock" id="instock1">
-			
-		
-	
-			
+                Item Name :<input type="text" name="itemname" id="itemname"><br>
+                SKU : <br><input type="text" name="sku" id="sku"><br>
+                Price : <input type="text" name="price" id="price">
+				Quantity :<input type="text" name="quantity" id="quantity">
+				Description :<input type="text" name="description" id="description">
+                
+                <button onclick="addHtmlTableRow();">Add</button>
+                <button onclick="editHtmlTbleSelectedRow();">Edit</button>
+                <button onclick="removeSelectedRow();">Remove</button>
+            </div>
+        </div>
+        
 	</div>
 	
+	<script>
+	 var rIndex,
+                table = document.getElementById("table");
+            
+            function checkEmptyInput()
+            {
+                var isEmpty = false,
+                    itemname = document.getElementById("itemname").value,
+                    sku = document.getElementById("sku").value,
+                    price = document.getElementById("price").value,
+					quantity = document.getElementById("quantity").value,
+					description = document.getElementById("description").value;
+            
+                if(itemname === ""){
+                    alert("Item Name Cannot Be Empty");
+                    isEmpty = true;
+                }
+                else if(sku === ""){
+                    alert("SKU Cannot Be Empty");
+                    isEmpty = true;
+                }
+                else if(price === ""){
+                    alert("Price Cannot Be Empty");
+                    isEmpty = true;
+                }
+				else if(quantity === ""){
+                    alert("Quantity Cannot Be Empty");
+                    isEmpty = true;
+                }
+				else if(description === ""){
+                    alert("Description Cannot Be Empty");
+                    isEmpty = true;
+                }
+                return isEmpty;
+            }
+            
+            
+            function addHtmlTableRow()
+            {
+               
+                if(!checkEmptyInput()){
+                var newRow = table.insertRow(table.length),
+                    cell1 = newRow.insertCell(0),
+                    cell2 = newRow.insertCell(1),
+                    cell3 = newRow.insertCell(2),
+					cell4 = newRow.insertCell(3),
+					cell5 = newRow.insertCell(4),
+                    itemname = document.getElementById("itemname").value,
+                    sku = document.getElementById("sku").value,
+					price = document.getElementById("price").value,
+					quantity = document.getElementById("quantity").value,
+                    description = document.getElementById("description").value;
+            
+                cell1.innerHTML = itemname;
+                cell2.innerHTML = sku;
+                cell3.innerHTML = price;
+				cell4.innerHTML = quantity;
+				cell5.innerHTML = description;
+                selectedRowToInput();
+            }
+            }
+            
+            function selectedRowToInput()
+            {
+                
+                for(var i = 1; i < table.rows.length; i++)
+                {
+                    table.rows[i].onclick = function()
+                    {
+                      rIndex = this.rowIndex;
+                      document.getElementById("itemname").value = this.cells[0].innerHTML;
+                      document.getElementById("sku").value = this.cells[1].innerHTML;
+                      document.getElementById("price").value = this.cells[2].innerHTML;
+					  document.getElementById("quantity").value = this.cells[3].innerHTML;
+					  document.getElementById("description").value = this.cells[4].innerHTML;
+                    };
+                }
+            }
+            selectedRowToInput();
+            
+            function editHtmlTbleSelectedRow()
+            {
+                var itemname = document.getElementById("itemname").value,
+                    sku = document.getElementById("sku").value,
+					price = document.getElementById("price").value,
+					quantity = document.getElementById("quantity").value,
+                    description = document.getElementById("description").value;
+               if(!checkEmptyInput()){
+                table.rows[rIndex].cells[0].innerHTML = itemname;
+                table.rows[rIndex].cells[1].innerHTML = sku;
+                table.rows[rIndex].cells[2].innerHTML = price;
+				table.rows[rIndex].cells[3].innerHTML = quantity;
+				table.rows[rIndex].cells[4].innerHTML = description;
+              }
+            }
+            
+            function removeSelectedRow()
+            {
+                table.deleteRow(rIndex);
+                document.getElementById("itemname").value = "";
+                document.getElementById("sku").value = "";
+                document.getElementById("price").value = "";
+				document.getElementById("quantity").value = "";
+				document.getElementById("description").value = "";
+            }
+
+
+	</script>
+        
+  
+
+	
+	<script src="script.js"></script>
+
+	</div>
 	<div class="footer">
 		<a href="#banner">Back to the top</a> 
 	</div>
-	
 	<div class="footer2">
 		<div class="row">
 		<div class="column">
 			<div class="topcontent">
 				<img src="images/k_b.png" alt="logo" id="banner">
-			
 			</div>
-  
 		</div>
-		
-		<div class="column">
-			
+		<div class="column">	
 			<a href="index.html">Home Page</a><br>
-			<a href="inventory.html">Inventory</a><br>
 			<a href="contact_us.html">Contact Us</a><br>
 			<a href="faq.html">FAQ</a><br>
-			
-			
-			
-		
 		</div>
 	</div>
-  
 	<div class="footer">
 		<p>2020 © All rights reserved.</p>
-	</div>
-  
-  
+	</div> 
 </body>
 </html>
