@@ -63,12 +63,12 @@ public class Database {
     /**
      * Takes in details of an item and adds it to the inventory table in the database.
      * @param sku SKU code for the item
-     * @param itemName Name of the item
+     * @param itemname Name of the item
      * @param price Price of the item
      * @param description Description of the item
      * @return Number of rows updated (It should be exactly one)
      */
-    public static int addInventory(String sku, String itemName, int quantity, double price, String description)
+    public static int addInventory(String sku, String itemname, int quantity, double price, String description)
     {
         int rows = 0;
 
@@ -78,7 +78,7 @@ public class Database {
              PreparedStatement stmt = con.prepareStatement(sql))
         {
             stmt.setString(1, sku);
-            stmt.setString(2, itemName);
+            stmt.setString(2, itemname);
             stmt.setInt(3, quantity);
             stmt.setDouble(4, price);
             stmt.setString(5, description);
