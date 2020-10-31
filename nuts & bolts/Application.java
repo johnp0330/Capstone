@@ -12,51 +12,16 @@ import java.io.*;
 public class Application extends AbstractHandler
 {
     private static final int PAGE_SIZE = 3000;
-    private static final String INDEX_HTML = loadPage("/index.html");
+    private static final String INDEX_HTML = loadFile("/index.html");
 
     /**
-     * Reads and returns every line of a html file, inserting JS and CSS in the head tag (Used for full web pages).
-     * @param file String of the file URI
-     * @return String of Every line of the full web page
+     * Reads and returns every line of a file (html, js, css).
+     * @param uri String of the file URI
+     * @return String Every line of the file
      */
-    private static String loadPage(String file)
+    private static String loadFile(String uri)
     {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(file)))) {
-            final StringBuilder page = new StringBuilder(PAGE_SIZE);
-            String line;
-
-            while ((line = reader.readLine()) != null && !line.contains("<head>")) // Reading page until we find the <head> tag
-            {
-                page.append(line);
-            }
-
-            // Adding the css and js to the page
-            page.append("<head> ");
-            page.append("<style>");
-            page.append(loadResource("/style.css"));
-            page.append("</style>");
-            page.append("<script>");
-            page.append(loadResource("/script.js"));
-            page.append("</script>");
-
-            // Continuing to read the rest of the page
-            while ((line = reader.readLine()) != null) {
-                page.append(line);
-            }
-
-            return page.toString();
-        } catch (final Exception exception) {
-            return getStackTrace(exception);
-        }
-    }
-
-    /**
-     * Reads and returns every line of a file (Used for JS and CSS files).
-     * @param file String of the file URI
-     * @return String of all lines of file
-     */
-    private static String loadResource(String file) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(file)))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Application.class.getResourceAsStream(uri)))) {
             final StringBuilder page = new StringBuilder(PAGE_SIZE);
             String line;
 
@@ -85,25 +50,31 @@ public class Application extends AbstractHandler
     private void handleHttpRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String type = request.getContentType();
         String uri = request.getRequestURI();
-        String page = INDEX_HTML;
 
-        if (type == "application/x-www-form-urlencoded") // POST request
+        if ("application/x-www-form-urlencoded".equals(type)) // POST request
         {
-            if (request.getParameter("date") != null) {
-                java.sql.Timestamp date = new java.sql.Timestamp(System.currentTimeMillis());
+            String sku = request.getParameter("sku");
+            String itemname = request.getParameter("itemname");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            double price = Double.parseDouble(request.getParameter("price"));
+            String description = request.getParameter("description");
 
-                String htmlResponse = Database.readWriteDB(date);
+            int rows = Database.addInventory(sku, itemname, quantity, price, description);
 
-                PrintWriter writer = response.getWriter();
-
-                writer.println("<html><p>" + htmlResponse + "</p></html>");
+            if (rows == 1)
+            {
+                System.out.println("Item added to inventory!");
+            }
+            else
+            {
+                System.out.println("Failed to add item to inventory.");
             }
         }
-        else if (uri.contains(".html")) // Requesting web page
+        else if (uri.endsWith(".html")) // Requesting web page
         {
-            page = loadPage(uri);
+            response.getWriter().println(loadFile(uri));
         }
-        else if (uri.contains(".png") || uri.contains(".jpg")) // Requesting image
+        else if (uri.endsWith(".png") || uri.endsWith(".jpg")) // Requesting image
         {
             String baseUrl = "src/main/resources";
             String mime = uri.contains(".png") ? "image/png" : "image/jpeg";
@@ -123,8 +94,20 @@ public class Application extends AbstractHandler
             in.close();
             out.close();
         }
-
-        response.getWriter().println(page);
+        else if (uri.endsWith(".css")) // Requesting CSS stylesheet
+        {
+            response.setContentType("text/css;charset=utf-8");
+            response.getWriter().println(loadFile(uri));
+        }
+        else if (uri.endsWith(".js")) // Requesting JavaScript
+        {
+            response.setContentType("application/javascript;charset=utf-8");
+            response.getWriter().println(loadFile(uri));
+        }
+        else
+        {
+            response.getWriter().println(INDEX_HTML);
+        }
     }
 
     private void handleCronTask(HttpServletRequest request, HttpServletResponse response) throws IOException {
