@@ -1,0 +1,239 @@
+@media (min-width:320px)  { /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */ }
+@media (min-width:480px)  { /* smartphones, Android phones, landscape iPhone */ }
+@media (min-width:600px)  { /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */ }
+@media (min-width:801px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
+@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
+@media (min-width:1281px) { /* hi-res laptops and desktops */ }
+.column {
+  float: left;
+  width: 25%;
+}
+.column_1 {
+  float: left;
+  width: 25%;
+}
+.column_2 {
+  float: left;
+  width: 25%;
+}
+.column_3 {
+  float: left;
+  width: 25%;
+}
+.column_4 {
+  float: left;
+  width: 25%;
+}
+.column_5 {
+  float: left;
+  width: 25%;
+}
+.column_6 {
+  float: left;
+  width: 25%;
+}
+.column_7 {
+  float: left;
+  width: 25%;
+}
+.column_8 {
+  float: left;
+  width: 25%;
+}
+.column_9 {
+  float: left;
+  width: 25%;
+}
+.column_10 {
+  float: left;
+  width: 25%;
+}
+
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#banner {
+	width: 50%;
+  height: auto;
+}
+
+body {
+	background-color: black; color: white;
+	margin: 5px;
+}
+	
+.content {
+	background-color: #373737;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+	padding: 10px;
+	
+}
+
+.faqcontent {
+	border-style: outset;
+	border-color: 8cc63f;
+	background-color: gray;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	padding: 20px;
+	font-weight: bold;
+	
+}
+
+
+.tablecontent {
+  overflow: hidden;
+  background-color: #8cc63f;
+}
+
+
+.tablecontent a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+.tablecontent a:hover {
+  background-color: darkgray;
+  color: white;
+}
+
+.footer {
+  background-color: gray;
+  text-align: center;
+  padding: 10px;
+}
+
+.footer2 {
+  background-color: gray;
+  text-align: center;
+  padding: 10px;
+}
+
+#fieldset {
+	border-style: onset;
+	border-color: white;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	margin-left: 1px;
+	margin-right: 10px;
+	padding: 1 px;
+	width: 10%;
+	font-weight: bold;
+	}
+	#fieldset {background-color: gray; color:white;}
+	
+	input{
+		display: inline-block;
+		text-align: left;
+		float: none;
+	}
+
+
+#cart {
+	width: 10%;
+  height: auto;
+  margin-top: 15%;
+}
+
+#account {
+	width: 10%;
+  height: auto;
+  margin-top: 15%;
+  margin-left: 50%;
+}
+
+#welcome {
+	width: 60%;
+  height: auto;
+   margin-left: 20%;
+}
+
+#onsale {
+	width: 60%;
+  height: auto;
+  margin-left: 40%;
+}
+
+
+#instock {
+	width: 150%;
+  height: auto;
+  margin-left: 80%;
+  margin-top: 10%;
+}
+ 
+
+
+#featured {
+    height: 250px;
+    border-radius: 100px;
+    overflow: hidden;
+    width: 400px;
+    margin: auto;
+    display: block;
+	
+}
+
+.container {
+	border-style: onset;
+	border-color: white;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	margin-left: 1px;
+	margin-right: 10px;
+	padding: 1 px;
+	width: 10%;
+	font-weight: bold;
+}
+
+table {
+	border-style: onset;
+	width: 1200px;
+	margin: 100px auto;
+	background-color: gray;
+}
+
+table, th, td {
+	Border: 2px solid white;
+	padding: 5px;
+}
+
+th {
+	Font-size: 30px;
+	font-weight: 700;
+	font-family: Arial;
+	color: white;
+}
+
+td {
+	font-size: 25px;
+	color: white;
+	font-weight: 400;
+	font-family: Arial;
+}
+
+tr {
+	transition:all .25s ease-in-out
+}
+ 
+tr:hover {
+	background-color:#EEE;
+	cursor: pointer
+}
+
+

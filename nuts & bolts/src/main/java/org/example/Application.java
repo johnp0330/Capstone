@@ -27,6 +27,7 @@ public class Application extends AbstractHandler
 
             while ((line = reader.readLine()) != null) {
                 page.append(line);
+                page.append("\n");
             }
 
             return page.toString();
