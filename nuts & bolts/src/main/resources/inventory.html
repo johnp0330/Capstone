@@ -8,7 +8,6 @@
 
 	<link rel="stylesheet" href="css/style.css">
 	<script src="js/jQuery.js"></script>
-	<script src="js/script.js"></script>
 </head>
 <body>
 	<div class="row">
@@ -161,16 +160,27 @@
                 </table>
             </div>
             <div class="tab tab-2">
-			
-                Item Name :<input type="text" name="itemname" id="itemname"><br>
-                SKU : <br><input type="text" name="sku" id="sku"><br>
-                Price : <input type="text" name="price" id="price">
-				Quantity :<input type="text" name="quantity" id="quantity">
-				Description :<input type="text" name="description" id="description">
-                
-                <button onclick="addHtmlTableRow();">Add</button>
-                <button onclick="editHtmlTbleSelectedRow();">Edit</button>
-                <button onclick="removeSelectedRow();">Remove</button>
+				<p id="formStatus"></p>
+				<form name="itemForm" action="Application.java" method="post">
+					<label for="itemname">Item Name:</label><br>
+					<input type="text" name="itemname" id="itemname"><br>
+
+					<label for="sku">SKU:</label><br>
+					<input type="text" name="sku" id="sku"><br>
+
+					<label for="price">Price:</label><br>
+					<input type="text" name="price" id="price"><br>
+
+					<label for="quantity">Quantity:</label><br>
+					<input type="text" name="quantity" id="quantity"><br>
+
+					<label for="description">Description:</label><br>
+					<input type="text" name="description" id="description"><br>
+
+					<input type="submit" id="submit" value="Submit">
+					<button onclick="editHtmlTbleSelectedRow();">Edit</button>
+					<button onclick="removeSelectedRow();">Remove</button>
+				</form>
             </div>
         </div>
         
@@ -215,8 +225,6 @@
             
             function addHtmlTableRow()
             {
-               
-                if(!checkEmptyInput()){
                 var newRow = table.insertRow(table.length),
                     cell1 = newRow.insertCell(0),
                     cell2 = newRow.insertCell(1),
@@ -235,7 +243,6 @@
 				cell4.innerHTML = quantity;
 				cell5.innerHTML = description;
                 selectedRowToInput();
-            }
             }
             
             function selectedRowToInput()
@@ -282,6 +289,35 @@
 				document.getElementById("description").value = "";
             }
 
+			var form = $('form[name="itemForm"]');
+
+			form.submit(function (e) {
+
+				e.preventDefault();
+
+				if (!checkEmptyInput())
+				{
+					var msg = "",
+						color = "";
+
+					$.ajax({
+						type: form.attr('method'),
+						url: form.attr('action'),
+						data: form.serialize(),
+						contentType: "application/x-www-form-urlencoded"
+					}).done(function(data) {
+						msg = "Item successfully added.";
+						color = "#77dd77";
+						addHtmlTableRow();
+					}).fail(function(data) {
+						msg = "* Item failed to be added.";
+						color = "#b00020";
+					}).always(function(data) {
+						$('p#formStatus').text(msg);
+						$('p#formStatus').css("color", color);
+					});
+				}
+			});
 
 	</script>
         
@@ -290,7 +326,6 @@
 	
 	<script src="script.js"></script>
 
-	</div>
 	<div class="footer">
 		<a href="#banner">Back to the top</a> 
 	</div>

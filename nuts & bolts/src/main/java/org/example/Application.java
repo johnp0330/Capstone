@@ -54,6 +54,8 @@ public class Application extends AbstractHandler
 
         if ("application/x-www-form-urlencoded".equals(type)) // POST request
         {
+            System.out.println("Post request received"); // Testing only
+
             String sku = request.getParameter("sku");
             String itemname = request.getParameter("itemname");
             int quantity = Integer.parseInt(request.getParameter("quantity"));
@@ -64,11 +66,11 @@ public class Application extends AbstractHandler
 
             if (rows == 1)
             {
-                System.out.println("Item added to inventory!");
+                System.out.println("Item added to inventory.  (SKU: " + sku + ")");
             }
             else
             {
-                System.out.println("Failed to add item to inventory.");
+                System.out.println("Failed to add item to inventory.  (SKU: " + sku + ")");
             }
         }
         else if (uri.endsWith(".html")) // Requesting web page

@@ -31,10 +31,10 @@ public class Database {
     {
         JSONObject jsonObject = new JSONObject();
 
-        try (Connection conn = connect())
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement())
         {
             String sql = "SELECT * FROM dbo.Inventory ORDER BY ItemName DESC";
-            Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             //Creating a json array
@@ -87,7 +87,32 @@ public class Database {
         }
         catch (SQLException e)
         {
-            System.out.println("Error adding to inventory.");
+            System.out.println("Error adding item to inventory.");
+            e.printStackTrace();
+        }
+
+        return rows;
+    }
+
+    /**
+     * Removes item from the inventory table of the database.
+     * @param sku SKU code of the item
+     * @return Number of rows altered
+     */
+    public static int removeInventory(String sku)
+    {
+        int rows = 0;
+
+        String sql = "DELETE FROM dbo.Inventory WHERE SKU='" + sku + "';";
+
+        try (Connection con = connect();
+             Statement stmt = con.createStatement())
+        {
+            rows = stmt.executeUpdate(sql);
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Error removing item from inventory.");
             e.printStackTrace();
         }
 
