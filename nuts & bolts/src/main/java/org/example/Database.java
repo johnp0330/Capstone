@@ -64,6 +64,7 @@ public class Database {
      * Takes in details of an item and adds it to the inventory table in the database.
      * @param sku SKU code for the item
      * @param itemname Name of the item
+     * @param quantity Number of items in stock
      * @param price Price of the item
      * @param description Description of the item
      * @return Number of rows updated (It should be exactly one)
@@ -97,7 +98,7 @@ public class Database {
     /**
      * Removes item from the inventory table of the database.
      * @param sku SKU code of the item
-     * @return Number of rows altered
+     * @return Number of rows altered (It should be exactly one)
      */
     public static int removeInventory(String sku)
     {
@@ -113,6 +114,41 @@ public class Database {
         catch (SQLException e)
         {
             System.out.println("Error removing item from inventory.");
+            e.printStackTrace();
+        }
+
+        return rows;
+    }
+
+    /**
+     * Takes in details of an item and adds it to the inventory table in the database.
+     * @param sku SKU code for the item
+     * @param itemname Name of the item
+     * @param quantity Number of items in stock
+     * @param price Price of the item
+     * @param description Description of the item
+     * @return Number of rows updated (It should be exactly one)
+     */
+    public static int editInventory(String sku, String itemname, int quantity, double price, String description)
+    {
+        int rows = 0;
+
+        String sql = "UPDATE dbo.Inventory SET ItemName = ?, Quantity = ?, Price = ?, Description = ? WHERE SKU = ?;";
+
+        try (Connection con = connect();
+             PreparedStatement stmt = con.prepareStatement(sql))
+        {
+            stmt.setString(1, itemname);
+            stmt.setInt(2, quantity);
+            stmt.setDouble(3, price);
+            stmt.setString(4, description);
+            stmt.setString(5, sku);
+
+            rows = stmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Error editing item in inventory.");
             e.printStackTrace();
         }
 
