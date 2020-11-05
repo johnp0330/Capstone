@@ -49,26 +49,48 @@ public class Application extends AbstractHandler
     }
 
     private void handleHttpRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String type = request.getContentType();
         String uri = request.getRequestURI();
         String action;
 
         if ((action = request.getParameter("inventory")) != null) // Requesting change to inventory
         {
-            if ("add".equals(action)) {
-                String sku = request.getParameter("sku");
-                String itemname = request.getParameter("itemname");
-                int quantity = Integer.parseInt(request.getParameter("quantity"));
-                double price = Double.parseDouble(request.getParameter("price"));
-                String description = request.getParameter("description");
+            String sku = request.getParameter("sku");
+            String itemname = request.getParameter("itemname");
+            int quantity = 0;
+            double price = 0;
+            if (request.getParameter("quantity") != null)
+                quantity = Integer.parseInt(request.getParameter("quantity"));
+            if (request.getParameter("price") != null)
+                price = Double.parseDouble(request.getParameter("price"));
+            String description = request.getParameter("description");
+            int rows = 0;
 
-                int rows = Database.addInventory(sku, itemname, quantity, price, description);
+            switch (action) {
+                case "read":
+                    response.setContentType("application/json");
+                    response.getWriter().println(Database.readInventory());
+                    rows = -1;
+                    break;
+                case "add":
+                    rows = Database.addInventory(sku, itemname, quantity, price, description);
+                    break;
+                case "remove":
+                    rows = Database.removeInventory(sku);
+                    break;
+                case "edit":
+                    rows = Database.editInventory(sku, itemname, quantity, price, description);
+                    break;
+            }
 
-                if (rows == 1) {
-                    System.out.println("Item added to inventory.  (SKU: " + sku + ")");
-                } else {
-                    System.out.println("Failed to add item to inventory.  (SKU: " + sku + ")");
-                }
+            if (rows == 1)
+            {
+                System.out.println("Successfully updated inventory.  (" + action + " SKU: " + sku + ")");
+                response.getWriter().print(true);
+            }
+            else if (rows == 0)
+            {
+                System.out.println("Failed to update inventory.  (" + action + " SKU: " + sku + ")");
+                response.getWriter().print(false);
             }
         }
         else if (uri.endsWith(".html")) // Requesting web page

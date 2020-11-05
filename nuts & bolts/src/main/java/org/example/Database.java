@@ -27,9 +27,9 @@ public class Database {
      * Reads all data from Inventory and formats it into a JSON object.
      * @return All inventory data in a JSON object
      */
-    public static JSONObject readInventory()
+    public static JSONArray readInventory()
     {
-        JSONObject jsonObject = new JSONObject();
+        JSONArray array = new JSONArray();
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement())
@@ -37,27 +37,27 @@ public class Database {
             String sql = "SELECT * FROM dbo.Inventory ORDER BY ItemName DESC";
             ResultSet rs = stmt.executeQuery(sql);
 
-            //Creating a json array
-            JSONArray array = new JSONArray();
             //Inserting ResultSet data into the json object
             while(rs.next()) {
                 JSONObject record = new JSONObject();
                 //Inserting key-value pairs into the json object
-                record.put("SKU", rs.getString("SKU"));
                 record.put("ItemName", rs.getString("ItemName"));
+                record.put("SKU", rs.getString("SKU"));
                 record.put("Quantity", rs.getInt("Quantity"));
                 record.put("Price", rs.getDouble("Price"));
                 record.put("Description", rs.getString("Description"));
+
                 array.add(record);
             }
-            jsonObject.put("Inventory", array);
         } catch (SQLException e)
         {
             System.out.println("Error retrieving inventory.");
             e.printStackTrace();
         }
 
-        return jsonObject;
+        System.out.println(array.toJSONString()); // TESTING
+
+        return array;
     }
 
     /**

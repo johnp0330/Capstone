@@ -33,10 +33,6 @@
 			<a href="faq.html">FAQ</a>		
 	</div>
 	
-	
-	
-	
-
 
 	<div class="content">
 	
@@ -47,16 +43,18 @@
         <div class="container">
             <div class="tab tab-1">
                 <table id="table">
-                    <tr>
-					
-                        <th>Item Name</th>
-                        <th>SKU</th>
-                        <th>Price</th>
+					<tbody>
+					<tr>
+
+						<th>Item Name</th>
+						<th>SKU</th>
+						<th>Price</th>
 						<th>Quantity</th>
 						<th>Description</th>
-						
-                    </tr>
-					
+
+					</tr>
+
+					<!--
 					<tr>
 					
 					<th>Hammer</th>
@@ -156,14 +154,14 @@
 					<th>Alerts when fire or smoke is detected in your home.</th>
 					
 					</tr>
- 
+ 							-->
+					</tbody>
                 </table>
+				<p id="tableStatus"></p>
             </div>
             <div class="tab tab-2">
 				<p id="formStatus"></p>
 				<form name="itemForm" action="Application.java" method="post">
-					<input type="hidden" name="inventory" value="add">
-
 					<label for="itemname">Item Name:</label><br>
 					<input type="text" name="itemname" id="itemname"><br>
 
@@ -180,17 +178,45 @@
 					<input type="text" name="description" id="description"><br>
 
 					<input type="submit" id="submit" value="Submit">
-					<button onclick="editHtmlTbleSelectedRow();">Edit</button>
-					<button onclick="removeSelectedRow();">Remove</button>
+					<button type="button" onclick="editHtmlTbleSelectedRow();">Edit</button>
+					<button type="button" onclick="removeSelectedRow();">Remove</button>
 				</form>
             </div>
         </div>
-        
+
 	</div>
-	
+
 	<script>
-	 var rIndex,
-                table = document.getElementById("table");
+	 		var rIndex,
+                table = document.getElementById("table"),
+                server = "Application.java";
+
+            $(window).on("load", function(){
+				$.ajax({
+					type: "POST",
+					url: server,
+					data: {inventory: 'read'},
+					dataType: "json"
+				}).done(function(data) {
+					$.each(data, function (index, obj) {
+
+						var eachrow = "<tr>"
+									+ "<td class=itemname>"+obj.ItemName+"</td>"
+									+ "<td class=sku>"+obj.SKU+"</td>"
+									+ "<td class=price>"+obj.Price+"</td>"
+									+ "<td class=quantity>"+obj.Quantity+"</td>"
+									+ "<td class=description>"+obj.Description+"</td>"
+									+ "</tr>";
+
+						$('#table').append(eachrow);
+					})
+				}).fail(function(data) {
+					$('p#tableStatus').text("Unable to load inventory.");
+					$('p#tableStatus').css("color", "#b00020");
+				}).always(function(data) {
+					selectedRowToInput();
+				});
+            });
             
             function checkEmptyInput()
             {
@@ -246,10 +272,9 @@
 				cell5.innerHTML = description;
                 selectedRowToInput();
             }
-            
+
             function selectedRowToInput()
             {
-                
                 for(var i = 1; i < table.rows.length; i++)
                 {
                     table.rows[i].onclick = function()
@@ -267,28 +292,63 @@
             
             function editHtmlTbleSelectedRow()
             {
-                var itemname = document.getElementById("itemname").value,
-                    sku = document.getElementById("sku").value,
-					price = document.getElementById("price").value,
-					quantity = document.getElementById("quantity").value,
-                    description = document.getElementById("description").value;
-               if(!checkEmptyInput()){
-                table.rows[rIndex].cells[0].innerHTML = itemname;
-                table.rows[rIndex].cells[1].innerHTML = sku;
-                table.rows[rIndex].cells[2].innerHTML = price;
-				table.rows[rIndex].cells[3].innerHTML = quantity;
-				table.rows[rIndex].cells[4].innerHTML = description;
-              }
+				if(!checkEmptyInput()){
+					var msg = "* Item failed to be edited.",
+						color = "#b00020";
+
+					$.ajax({
+						type: form.attr('method'),
+						url: form.attr('action'),
+						data: form.serialize() + '&inventory=edit',
+						contentType: "application/x-www-form-urlencoded"
+					}).done(function(data) {
+						if (data){
+							var itemname = document.getElementById("itemname").value,
+								sku = document.getElementById("sku").value,
+								price = document.getElementById("price").value,
+								quantity = document.getElementById("quantity").value,
+								description = document.getElementById("description").value;
+
+							table.rows[rIndex].cells[0].innerHTML = itemname;
+							table.rows[rIndex].cells[1].innerHTML = sku;
+							table.rows[rIndex].cells[2].innerHTML = price;
+							table.rows[rIndex].cells[3].innerHTML = quantity;
+							table.rows[rIndex].cells[4].innerHTML = description;
+							msg = "Item edited.";
+							color = "#77dd77";
+						}
+					}).always(function(data) {
+						$('p#formStatus').text(msg);
+						$('p#formStatus').css("color", color);
+					});
+				}
             }
             
             function removeSelectedRow()
             {
-                table.deleteRow(rIndex);
-                document.getElementById("itemname").value = "";
-                document.getElementById("sku").value = "";
-                document.getElementById("price").value = "";
-				document.getElementById("quantity").value = "";
-				document.getElementById("description").value = "";
+            	var msg = "* Item failed to be removed.",
+					color = "#b00020";
+
+				$.post(server, {inventory: "remove", sku: $('input#sku').val()},
+					function(successful){
+						if (successful)
+						{
+							msg = "Item removed.";
+							color = "#77dd77";
+
+							table.deleteRow(rIndex);
+							document.getElementById("itemname").value = "";
+							document.getElementById("sku").value = "";
+							document.getElementById("price").value = "";
+							document.getElementById("quantity").value = "";
+							document.getElementById("description").value = "";
+						}
+				}).fail(function(data) {
+					$('p#formStatus').text("Error " + msg);
+				}).always(function(data) {
+					$('p#formStatus').text(msg);
+					$('p#formStatus').css("color", color);
+				});
             }
 
 			var form = $('form[name="itemForm"]');
@@ -305,7 +365,7 @@
 					$.ajax({
 						type: form.attr('method'),
 						url: form.attr('action'),
-						data: form.serialize(),
+						data: form.serialize() + '&inventory=add',
 						contentType: "application/x-www-form-urlencoded"
 					}).done(function(data) {
 						msg = "Item successfully added.";
@@ -322,11 +382,7 @@
 			});
 
 	</script>
-        
-  
 
-	
-	<script src="script.js"></script>
 
 	<div class="footer">
 		<a href="#banner">Back to the top</a> 
