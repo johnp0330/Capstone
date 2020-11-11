@@ -1,8 +1,12 @@
 package org.example;
 
 import java.sql.*;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import javax.swing.*;
 
 public class Database {
     private static final String port = "1433";
@@ -25,16 +29,31 @@ public class Database {
 
     /**
      * Reads all data from Inventory and formats it into a JSON object.
+     * @param skus Array of sku codes.  Make 'null' if you want to read everything.
      * @return All inventory data in a JSON object
      */
-    public static JSONArray readInventory()
+    public static JSONArray readInventory(String[] skus)
     {
         JSONArray array = new JSONArray();
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement())
         {
-            String sql = "SELECT * FROM dbo.Inventory ORDER BY ItemName DESC";
+            String items = "*";
+            if (skus != null) {
+                int size = skus.length, i;
+                StringBuilder sb = new StringBuilder();
+
+                for (i = 0; i < size-1; i++)
+                {
+                    sb.append(skus[i]);
+                    sb.append(", ");
+                }
+                sb.append(skus[i]);
+                items = sb.toString();
+            }
+
+            String sql = "SELECT "+items+" FROM dbo.Inventory ORDER BY ItemName DESC";
             ResultSet rs = stmt.executeQuery(sql);
 
             //Inserting ResultSet data into the json object
