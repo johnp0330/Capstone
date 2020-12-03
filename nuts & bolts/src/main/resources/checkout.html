@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Nuts and Bolts - HomePage</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/script.js"></script>
+	<script src="js/jQuery.js"></script>
+	
+	
+</head>
+<body>
+
+<div class="content">
+
+	<div class="faqcontent">
+		<div class="cartcontainer">
+​
+<h1>Thank You!</h1>
+
+<h1>Receipt</h1>
+
+        <div>
+            <ul id="show-cart">
+                <li>???????</li>
+            </ul>
+		</div>
+		
+
+  <h1>You have Purchased <span id="count-cart">X</span> items.</h1>
+           
+ <h1><div> Subtotal <!-- For future implementation ( <span id="count-cart">X</span> )-->: :$<span id="total-cart"></span></div></h1>
+		<h1><a href="inventory.html" id="shopping">Go Back To Shopping</a></h1>
+        
+		
+		<div>
+			<button onclick="window.print()">Print Copy</button>
+        </div>
+
+	</div>
+	</div>
+</div>
+
+
+        <script src="shoppingCart.js"></script>
+
+        <script>
+		
+			$("#shopping").click(function(event){
+                shoppingCart.clearCart();
+                displayCart();
+            });
+			
+			function displayCart() {
+                var cartArray = shoppingCart.listCart();
+                console.log(cartArray);
+                var output = "";
+
+                for (var i in cartArray) {
+                    output += "<list><h1>"
+                        +cartArray[i].name
+                        +cartArray[i].name
+                        +" - QTY "+cartArray[i].count+" "
+                        +" x "+cartArray[i].price
+                        +" = "+cartArray[i].total
+                        +"</h1></list>";
+                }
+
+
+                $("#show-cart").html(output);
+                $("#count-cart").html( shoppingCart.countCart() );
+                $("#total-cart").html( shoppingCart.totalCart() );
+            }
+
+
+            displayCart();
+
+
+        </script>
+
+​
+</body>

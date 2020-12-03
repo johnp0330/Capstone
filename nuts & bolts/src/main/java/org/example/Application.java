@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.List;
 
 public class Application extends AbstractHandler
 {
@@ -53,7 +52,52 @@ public class Application extends AbstractHandler
         String uri = request.getRequestURI();
         String action;
 
-        if (uri.endsWith(".png") || uri.endsWith(".jpg")) // Requesting image
+        if ((action = request.getParameter("inventory")) != null) // Requesting change to inventory
+        {
+            String sku = request.getParameter("sku");
+            String itemname = request.getParameter("itemname");
+            int quantity = 0;
+            double price = 0;
+            if (request.getParameter("quantity") != null)
+                quantity = Integer.parseInt(request.getParameter("quantity"));
+            if (request.getParameter("price") != null)
+                price = Double.parseDouble(request.getParameter("price"));
+            String description = request.getParameter("description");
+            int rows = 0;
+
+            switch (action) {
+                case "read":
+                    response.setContentType("application/json");
+                    response.getWriter().println(Database.readInventory());
+                    rows = -1;
+                    break;
+                case "add":
+                    rows = Database.addInventory(sku, itemname, quantity, price, description);
+                    break;
+                case "remove":
+                    rows = Database.removeInventory(sku);
+                    break;
+                case "edit":
+                    rows = Database.editInventory(sku, itemname, quantity, price, description);
+                    break;
+            }
+
+            if (rows == 1)
+            {
+                System.out.println("Successfully updated inventory.  (" + action + " SKU: " + sku + ")");
+                response.getWriter().print(true);
+            }
+            else if (rows == 0)
+            {
+                System.out.println("Failed to update inventory.  (" + action + " SKU: " + sku + ")");
+                response.getWriter().print(false);
+            }
+        }
+        else if (uri.endsWith(".html")) // Requesting web page
+        {
+            response.getWriter().println(loadFile(uri));
+        }
+        else if (uri.endsWith(".png") || uri.endsWith(".jpg")) // Requesting image
         {
             String baseUrl = "src/main/resources";
             String mime = uri.contains(".png") ? "image/png" : "image/jpeg";
@@ -73,10 +117,6 @@ public class Application extends AbstractHandler
             in.close();
             out.close();
         }
-        else if (uri.endsWith(".html")) // Requesting web page
-        {
-            response.getWriter().println(loadFile(uri));
-        }
         else if (uri.endsWith(".css")) // Requesting CSS stylesheet
         {
             response.setContentType("text/css;charset=utf-8");
@@ -86,43 +126,6 @@ public class Application extends AbstractHandler
         {
             response.setContentType("application/javascript;charset=utf-8");
             response.getWriter().println(loadFile(uri));
-        }
-        else if ((action = request.getParameter("inventory")) != null) // Requesting change to inventory
-        {
-            String sku = request.getParameter("sku");
-            String itemname = request.getParameter("itemname");
-            int quantity = 0;
-            double price = 0;
-            if (request.getParameter("quantity") != null)
-                quantity = Integer.parseInt(request.getParameter("quantity"));
-            if (request.getParameter("price") != null)
-                price = Double.parseDouble(request.getParameter("price"));
-            String description = request.getParameter("description");
-            int rows = 0;
-
-            switch (action) {
-                case "read" -> {
-                    rows = -1;
-                    response.setContentType("application/json");
-                    response.getWriter().println(Database.readInventory());
-                }
-                case "add" -> rows = Database.addInventory(sku, itemname, quantity, price, description);
-                case "remove" -> rows = Database.removeInventory(sku);
-                case "edit" -> rows = Database.editInventory(sku, itemname, quantity, price, description);
-                case "reduce" -> {
-                    rows = -1;
-                    List<String> itemsOutOfStock = Database.reduceInventory(request.getParameter("skus"), request.getParameter("quantities"));
-                    response.getWriter().print(itemsOutOfStock);
-                }
-            }
-
-            if (rows == 1) {
-                System.out.println("Successfully updated inventory.  (" + action + " SKU: " + sku + ")");
-                response.getWriter().print(true);
-            } else if (rows == 0) {
-                System.out.println("Failed to update inventory.  (" + action + " SKU: " + sku + ")");
-                response.getWriter().print(false);
-            }
         }
         else
         {

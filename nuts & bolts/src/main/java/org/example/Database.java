@@ -1,15 +1,8 @@
 package org.example;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import com.microsoft.sqlserver.jdbc.SQLServerConnection;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
-import javax.swing.*;
 
 public class Database {
     private static final String port = "1433";
@@ -30,6 +23,10 @@ public class Database {
         return DriverManager.getConnection(connectionURL);
     }
 
+    /**
+     * Reads all data from Inventory and formats it into a JSON object.
+     * @return All inventory data in a JSON object
+     */
     public static JSONArray readInventory()
     {
         JSONArray array = new JSONArray();
@@ -158,55 +155,37 @@ public class Database {
         return rows;
     }
 
-    public static List<String> reduceInventory(String[] skus, int[] quantities)
+    /**
+     * Reads and returns the last record from the database and writes the current date to the database.
+     * @param date Date at which the button was pressed
+     * @return String containing the previous date at which the button was pressed
+     */
+    public static String readWriteDB(java.sql.Timestamp date)
     {
-        List<String> itemsOutOfStock = new ArrayList<>();
-        List<String> queries = new ArrayList<>();
+        String htmlResponse;
 
-        try (Connection con = connect();
-             Statement stmt = con.createStatement())
+        try (Connection conn = connect())
         {
-            for (int i = 0; i < skus.length; i++)
-            {
-                String sku = skus[i];
-                int quantityPurchased = quantities[i];
-                ResultSet rs = stmt.executeQuery("SELECT Quantity FROM Inventory WHERE SKU = " + sku + ";");
-                int quantityInStock = rs.getInt("Quantity");
+            // Reading from DB
+            String sql = "SELECT TOP 1 Date FROM dbo.DateTime ORDER BY id DESC";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            java.sql.Timestamp lastDate = rs.getTimestamp("Date");
 
-                if (quantityPurchased >= quantityInStock)
-                {
-                    queries.add("UPDATE Inventory SET Quantity = " + (quantityInStock - quantityPurchased) + " WHERE SKU = " + sku + ";");
-                }
-                else
-                {
-                    itemsOutOfStock.add(sku);
-                }
-            }
+            // Writing to DB
+            sql = "INSERT INTO dbo.DateTime (Date) VALUES (?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setTimestamp(1, date);
+            stmt.executeUpdate();
 
-            if (itemsOutOfStock.isEmpty())
-            {
-                for (String query : queries)
-                    stmt.executeQuery(query);
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println("Error editing item in inventory.");
+            htmlResponse = "The last click was at " + lastDate.toString() + " UTC";
+        } catch (SQLException e) {
+            System.out.println("SQL error");
+            htmlResponse = "Error sending or retrieving data";
             e.printStackTrace();
         }
 
-        return itemsOutOfStock;
+        return htmlResponse;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

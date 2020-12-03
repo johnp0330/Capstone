@@ -56,6 +56,40 @@
   clear: both;
 }
 
+#shopping:link, #shopping:visited {
+  background-color: #8cc63f;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  color: white;
+  padding: 14px 16px;
+  font-weight: bold;
+  border: 5px solid black;
+
+}
+
+#shopping:hover, #shopping:active {
+  background-color: #373737;
+}
+
+#Purchase:link, #Purchase:visited {
+  background-color: #8cc63f;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  color: white;
+  padding: 14px 16px;
+  font-weight: bold;
+  border: 5px solid black;
+
+}
+
+#Purchase:hover, #Purchase:active {
+  background-color: #373737;
+}
+
 #banner {
 	width: 50%;
   height: auto;
@@ -64,6 +98,7 @@
 body {
 	background-color: black; color: white;
 	margin: 5px;
+	min-width: 1200px;
 }
 	
 .content {
@@ -73,6 +108,12 @@ body {
 	margin-left: 5px;
 	margin-right: 5px;
 	padding: 10px;
+	
+ min-height: 100vh; /* will cover the 100% of viewport */
+ overflow: hidden;
+ display: block;
+ position: relative;
+ padding-bottom: 100px; /* height of your footer */
 	
 }
 
@@ -108,21 +149,20 @@ body {
 
 
 .tablecontent a:hover {
-  background-color: darkgray;
+  background-color: #373737;
   color: white;
 }
 
-.footer {
+footer {
   background-color: gray;
   text-align: center;
-  padding: 10px;
+  bottom: 0;
+  width: 100%;
+  height: 4rem; 
+
 }
 
-.footer2 {
-  background-color: gray;
-  text-align: center;
-  padding: 10px;
-}
+
 
 #fieldset {
 	border-style: onset;
@@ -150,6 +190,14 @@ body {
   margin-top: 15%;
 }
 
+.cartcontainer {
+
+  text-align: center;
+
+
+
+}
+
 #account {
 	width: 10%;
   height: auto;
@@ -173,7 +221,7 @@ body {
 #instock {
 	width: 150%;
   height: auto;
-  margin-left: 80%;
+  margin-left: 120%;
   margin-top: 10%;
 }
  
@@ -203,7 +251,7 @@ body {
 
 table {
 	border-style: onset;
-	width: 1200px;
+	width: 1500px;
 	margin: 100px auto;
 	background-color: gray;
 }
@@ -236,4 +284,23 @@ tr:hover {
 	cursor: pointer
 }
 
+
+#tablecart {
+	border-style: onset;
+	width: 1200px;
+	margin: 10px auto;
+	background-color: gray;
+}
+
+#tablecart,{
+	Border: 2px solid white;
+	padding: 5px;
+}
+
+#count-cart{
+
+    font-size: 30px;
+    padding: 10px;
+    margin-left: -10px;
+}
 

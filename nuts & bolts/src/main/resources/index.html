@@ -6,11 +6,12 @@
 	<title>Nuts and Bolts - HomePage</title>
 	<link rel="stylesheet" href="css/style.css">
 	<script src="js/script.js"></script>
+	<script src="js/jQuery.js"></script>
 </head>
 <body>
 	<div class="row">
 		<div class="column">
-			<img src="images/n_b-header.png" alt="logo" id="banner">
+			<a href="index.html"><img src="images/n_b-header.png" alt="logo" id="banner"></a>
 		</div>
 		<div class="column">
 			<p></p>
@@ -19,7 +20,10 @@
 			<p></p>
 		</div>
 		<div class="column">
-			<img src="images/account.jpg" alt="account" id="account"> <img src="images/cart.jpg" alt="cart" id="cart">
+			
+			 <img src="images/account.jpg" alt="account" id="account"> 
+			<a href="cart_page.html"><img src="images/cart.jpg"" alt="cart" id="cart"></a> 
+			<span id="count-cart">X</span>
 		</div>
 	</div>
 
@@ -27,9 +31,9 @@
 	<div class="tablecontent">
 		<a href="index.html">Home Page</a>
 		<a href="inventory.html">Inventory</a>
-		<a href="forsale.html">On Sale</a>
 		<a href="contact_us.html">Contact Us</a>
 		<a href="faq.html">FAQ</a>
+
 	</div>
 	<div class="content">
 
@@ -43,13 +47,6 @@
 		<div class="row">
 			<div class="column">
 
-				<a href="forsale.html"><img src="images/onsale.png" alt="onsale" id="onsale"></a>
-
-
-			</div>
-
-			<div class="column">
-
 				<a href="inventory.html"><img src="images/instock.png" alt="instock" id="instock"></a>
 
 			</div>
@@ -57,29 +54,59 @@
 
 	</div>
 
-	<div class="footer">
-		<a href="#banner">Back to the top</a>
-	</div>
+ <script src="script.js"></script>
+ <script src="shoppingCart.js"></script>
+ <script>
+            $(".add-to-cart").click(function(event){
+                event.preventDefault();
+                var name = $(this).attr("data-name");
+                var price = Number($(this).attr("data-price"));
 
-	<div class="footer2">
-		<div class="row">
-			<div class="column">
-				<div class="topcontent">
-					<img src="images/n_b.png" alt="logo" id="banner">
-				</div>
-			</div>
-			<div class="column">
-				<a href="index.html">Home Page</a><br>
-				<a href="contact_us.html">Contact Us</a><br>
-				<a href="faq.html">FAQ</a><br>
-			</div>
-		</div>
-	</div>
-		<div class="footer">
-			<p>2020 © All rights reserved.</p>
-		</div>
+                shoppingCart.addItemToCart(name, price, 1);
+                displayCart();
+            });
+
+
+            function displayCart() {
+                var cartArray = shoppingCart.listCart();
+                console.log(cartArray);
+                var output = "";
+
+
+                $("#show-cart").html(output);
+                $("#count-cart").html( shoppingCart.countCart() );
+                $("#total-cart").html( shoppingCart.totalCart() );
+            }
+
+
+
+
+            displayCart();
+
+</script>
+
+
+
 
 
 </body>
+
+<footer>
+
+				<p>2020 © All rights reserved.</p>
+				<a href="index.html">Home Page</a>
+				&nbsp;
+				<a href="contact_us.html">Contact Us</a>
+				&nbsp;
+				<a href="faq.html">FAQ</a> 	
+				&nbsp;
+		    	<a href="#banner">Back to the top <br>
+				</a>
+		
+
+
+
+
+</footer>
 
 </html>
