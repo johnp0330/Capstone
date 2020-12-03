@@ -87,13 +87,6 @@ public class Application extends AbstractHandler
             response.setContentType("application/javascript;charset=utf-8");
             response.getWriter().println(loadFile(uri));
         }
-        else if ((action = request.getParameter("cart")) != null)
-        {
-            String[] skus = request.getParameterValues("sku");
-
-            response.setContentType("application/json");
-            response.getWriter().println(Database.readInventory(skus));
-        }
         else if ((action = request.getParameter("inventory")) != null) // Requesting change to inventory
         {
             String sku = request.getParameter("sku");
@@ -108,20 +101,19 @@ public class Application extends AbstractHandler
             int rows = 0;
 
             switch (action) {
-                case "read":
-                    response.setContentType("application/json");
-                    response.getWriter().println(Database.readInventory(null));
+                case "read" -> {
                     rows = -1;
-                    break;
-                case "add":
-                    rows = Database.addInventory(sku, itemname, quantity, price, description);
-                    break;
-                case "remove":
-                    rows = Database.removeInventory(sku);
-                    break;
-                case "edit":
-                    rows = Database.editInventory(sku, itemname, quantity, price, description);
-                    break;
+                    response.setContentType("application/json");
+                    response.getWriter().println(Database.readInventory());
+                }
+                case "add" -> rows = Database.addInventory(sku, itemname, quantity, price, description);
+                case "remove" -> rows = Database.removeInventory(sku);
+                case "edit" -> rows = Database.editInventory(sku, itemname, quantity, price, description);
+                case "reduce" -> {
+                    rows = -1;
+                    List<String> itemsOutOfStock = Database.reduceInventory(request.getParameter("skus"), request.getParameter("quantities"));
+                    response.getWriter().print(itemsOutOfStock);
+                }
             }
 
             if (rows == 1) {

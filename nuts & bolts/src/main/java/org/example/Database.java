@@ -1,8 +1,11 @@
 package org.example;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.microsoft.sqlserver.jdbc.SQLServerConnection;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -27,33 +30,14 @@ public class Database {
         return DriverManager.getConnection(connectionURL);
     }
 
-    /**
-     * Reads all data from Inventory and formats it into a JSON object.
-     * @param skus Array of sku codes.  Make 'null' if you want to read everything.
-     * @return All inventory data in a JSON object
-     */
-    public static JSONArray readInventory(String[] skus)
+    public static JSONArray readInventory()
     {
         JSONArray array = new JSONArray();
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement())
         {
-            String items = "*";
-            if (skus != null) {
-                int size = skus.length, i;
-                StringBuilder sb = new StringBuilder();
-
-                for (i = 0; i < size-1; i++)
-                {
-                    sb.append(skus[i]);
-                    sb.append(", ");
-                }
-                sb.append(skus[i]);
-                items = sb.toString();
-            }
-
-            String sql = "SELECT "+items+" FROM dbo.Inventory ORDER BY ItemName DESC";
+            String sql = "SELECT * FROM dbo.Inventory ORDER BY ItemName DESC";
             ResultSet rs = stmt.executeQuery(sql);
 
             //Inserting ResultSet data into the json object
@@ -174,37 +158,55 @@ public class Database {
         return rows;
     }
 
-    /**
-     * Reads and returns the last record from the database and writes the current date to the database.
-     * @param date Date at which the button was pressed
-     * @return String containing the previous date at which the button was pressed
-     */
-    public static String readWriteDB(java.sql.Timestamp date)
+    public static List<String> reduceInventory(String[] skus, int[] quantities)
     {
-        String htmlResponse;
+        List<String> itemsOutOfStock = new ArrayList<>();
+        List<String> queries = new ArrayList<>();
 
-        try (Connection conn = connect())
+        try (Connection con = connect();
+             Statement stmt = con.createStatement())
         {
-            // Reading from DB
-            String sql = "SELECT TOP 1 Date FROM dbo.DateTime ORDER BY id DESC";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            java.sql.Timestamp lastDate = rs.getTimestamp("Date");
+            for (int i = 0; i < skus.length; i++)
+            {
+                String sku = skus[i];
+                int quantityPurchased = quantities[i];
+                ResultSet rs = stmt.executeQuery("SELECT Quantity FROM Inventory WHERE SKU = " + sku + ";");
+                int quantityInStock = rs.getInt("Quantity");
 
-            // Writing to DB
-            sql = "INSERT INTO dbo.DateTime (Date) VALUES (?)";
-            stmt = conn.prepareStatement(sql);
-            stmt.setTimestamp(1, date);
-            stmt.executeUpdate();
+                if (quantityPurchased >= quantityInStock)
+                {
+                    queries.add("UPDATE Inventory SET Quantity = " + (quantityInStock - quantityPurchased) + " WHERE SKU = " + sku + ";");
+                }
+                else
+                {
+                    itemsOutOfStock.add(sku);
+                }
+            }
 
-            htmlResponse = "The last click was at " + lastDate.toString() + " UTC";
-        } catch (SQLException e) {
-            System.out.println("SQL error");
-            htmlResponse = "Error sending or retrieving data";
+            if (itemsOutOfStock.isEmpty())
+            {
+                for (String query : queries)
+                    stmt.executeQuery(query);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Error editing item in inventory.");
             e.printStackTrace();
         }
 
-        return htmlResponse;
+        return itemsOutOfStock;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
