@@ -34,29 +34,41 @@
 			<a href="contact_us.html">Contact Us</a>
 			<a href="faq.html">FAQ</a>		
 	</div>
+	
 	<div class="content">
+	
+<h1> Employee Login Page </h1>
+<form name="login">
+Username<input type="text" name="userid"/>
+Password<input type="password" name="pswrd"/>
+<input type="button" onclick="check(this.form)" value="Login"/>
+<input type="reset" value="Cancel"/>
+</form>
+
+</div>
 
 
-		<img src="images/welcome.png" alt="welcome" id="welcome">
-
-		<div class="faqcontent">
-			<h1 style="text-align:center;">Mission Statement</h1>
-		</div>
-
-		<div class="row">
-			<div class="column">
-
-				<a href="inventory.html"><img src="images/instock.png" alt="instock" id="instock"></a>
-
-			</div>
-		</div>
-
-	</div>
-
- <script src="script.js"></script>
+<script src="script.js"></script>
  <script src="shoppingCart.js"></script>
- <script>
-            $(".add-to-cart").click(function(event){
+
+<script language="javascript">
+
+
+function check(form)/*function to check userid & password*/
+{
+ /*the following code checkes whether the entered userid and password are matching*/
+ if(form.userid.value == "jon" && form.pswrd.value == "12345")
+  {
+    window.open('inventory.html')/*opens the target page while Id & password matches*/
+  }
+ else
+ {
+   alert("Error Password or Username")/*displays error message*/
+  }
+}
+
+
+ $(".add-to-cart").click(function(event){
                 event.preventDefault();
                 var name = $(this).attr("data-name");
                 var price = Number($(this).attr("data-price"));
@@ -84,12 +96,6 @@
 
 </script>
 
-
-
-
-
-</body>
-
 <footer>
 
 				<p>2020 © All rights reserved.</p>
@@ -108,4 +114,5 @@
 
 </footer>
 
+</body>
 </html>
